@@ -16,20 +16,22 @@ var argv = require('yargs')
 
 if(typeof argv.l === 'string' && argv.l.length > 0){
 	
-		weather(argv.l, function(currentWeather){
-			console.log(currentWeather)
+		// weather(argv.l, function(currentWeather){
+		// 	console.log(currentWeather)
+		// })
+		weather(argv.l).then(function(currentWeather){
+			console.log(currentWeather);
+		}).catch(function(error){
+			console.log(error);
 		})
-} else{
-		console.log('No location');
-		location(function(location){
 
-			if(location){
-					weather(location.city, function(currentWeather){
-					console.log(currentWeather);
-					})
-				}
-			else{
-				console.log('Unable to find location');
-			}
-		});
+} else{
+
+		location().then(function(loc){
+			return weather(loc.city);
+		}).then (function(currentWeather){
+			console.log(currentWeather);
+		}).catch(function(error){
+			console.log(error);
+		})
 }
